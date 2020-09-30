@@ -22,7 +22,7 @@ def visualize_shader(model, loader, save_path, save_raw = False):
         targets = []
         for ind, tensors in enumerate(loader):
 
-            inp = [ Variable( t.float().cuda(async=True) ) for t in tensors[:-1] ]
+            inp = [ Variable( t.float().cuda() ) for t in tensors[:-1] ]
             targ = tensors[-1].float().cuda()
             pred = model.forward(*inp).data
 
@@ -35,7 +35,6 @@ def visualize_shader(model, loader, save_path, save_raw = False):
             ## shading targets
             targets.extend([img.repeat(3,1,1) for img in targ.split(1)])
 
-        # print len(inputs), len(predictions), len(targets)
         images = [[inputs[i], predictions[i], targets[i]] for i in range(len(inputs))]
         images = [img for sublist in images for img in sublist]
         # pdb.set_trace()
@@ -59,7 +58,7 @@ def visualize_relit_shader(model, loader, save_path, params, save_raw = False):
         targets = []
         for ind, tensors in enumerate(loader):
 
-            inp = [ Variable( t.float().cuda(async=True) ) for t in tensors[:-1] ]
+            inp = [ Variable( t.float().cuda() ) for t in tensors[:-1] ]
             targ = tensors[-1].float()
             normals = inp[0]
             num_lights = normals.size(0)
@@ -81,7 +80,6 @@ def visualize_relit_shader(model, loader, save_path, params, save_raw = False):
                 targets.extend([img.repeat(3,1,1) for img in targ.split(1)])
 
 
-        # print len(inputs), len(predictions), len(targets)
         images = [[inputs[i], predictions[i], targets[i]] for i in range(len(inputs))]
         images = [img for sublist in images for img in sublist]
         # pdb.set_trace()
@@ -116,7 +114,7 @@ def visualize_decomposer(model, loader, save_path, epoch, save_raw = False):
     images = []
 
     for ind, tensors in enumerate(loader):
-        tensors = [Variable(t.float().cuda(async=True)) for t in tensors]
+        tensors = [Variable(t.float().cuda()) for t in tensors]
         inp, mask, refl_targ, depth_targ, shape_targ, lights_targ = tensors
 
         refl_pred, depth_pred, shape_pred, lights_pred = model.forward(inp, mask)
@@ -156,7 +154,7 @@ def visualize_decomposer(model, loader, save_path, epoch, save_raw = False):
     # scipy.misc.imsave(fullpath, grid)
 
     losses = [refl_loss, shape_loss, lights_loss]
-    print '<Val> Losses: ', losses
+    print('<Val> Losses: ', losses)
     # torchvision.utils.save_image(grid, os.path.join(save_path, 'shader.png'))
     return losses
 
@@ -179,7 +177,7 @@ def visualize_decomposer_full(model, loader, save_path):
     masks = []
 
     for ind, tensors in enumerate(loader):
-        tensors = [Variable(t.float().cuda(async=True)) for t in tensors]
+        tensors = [Variable(t.float().cuda()) for t in tensors]
         inp, mask, refl_targ, depth_targ, shape_targ, lights_targ = tensors
 
         refl_pred, depth_pred, shape_pred, lights_pred = model.forward(inp, mask)
@@ -240,7 +238,7 @@ def visualize_composer(model, loader, save_path, epoch, raw=False):
     masks = []
 
     for ind, tensors in enumerate(loader):
-        tensors = [Variable(t.float().cuda(async=True)) for t in tensors]
+        tensors = [Variable(t.float().cuda()) for t in tensors]
         inp, mask, refl_targ, depth_targ, shape_targ, lights_targ, shad_targ = tensors
         depth_normals_targ = pipeline.depth_to_normals(depth_targ.unsqueeze(1), mask=mask)
         # depth_normals_targ
@@ -286,9 +284,6 @@ def visualize_composer(model, loader, save_path, epoch, raw=False):
         masks.append(mask)
 
         # pdb.set_trace()
-        # print shad_targ.size()
-        # print shad_pred.size()
-        # print [len(sublist) for sublist in splits]
         splits = [sublist[ind] for ind in range(len(splits[0])) for sublist in splits]
         images.extend(splits)
 
@@ -316,7 +311,7 @@ def visualize_composer(model, loader, save_path, epoch, raw=False):
     shad_loss /= float(ind)
     depth_normals_loss /= float(ind)
     depth_normals_loss = depth_normals_loss.data[0]
-    print 'depth_normals_loss: ', depth_normals_loss
+    print('depth_normals_loss: ', depth_normals_loss)
 
     # pdb.set_trace()
     grid = torchvision.utils.make_grid(images, nrow=7).cpu().numpy().transpose(1,2,0)
@@ -343,7 +338,7 @@ def visualize_composer_alt(model, loader, save_path, epoch, raw=False):
     masks = []
 
     for ind, tensors in enumerate(loader):
-        tensors = [Variable(t.float().cuda(async=True)) for t in tensors]
+        tensors = [Variable(t.float().cuda()) for t in tensors]
         inp, mask, refl_targ, depth_targ, shape_targ, lights_targ, shad_targ = tensors
         depth_normals_targ = pipeline.depth_to_normals(depth_targ.unsqueeze(1), mask=mask)
         # depth_normals_targ
@@ -355,7 +350,7 @@ def visualize_composer_alt(model, loader, save_path, epoch, raw=False):
         
         ####
         shad_pred = model.shader(shape_pred, lights_pred)
-        print 'shad_pred: ', shad_pred.size()
+        print('shad_pred: ', shad_pred.size())
         # shad_pred = shad_pred.repeat(1,3,1,1)
 
         # relit = pipeline.relight(model.shader, shape_pred, lights_pred, 6)
@@ -395,9 +390,6 @@ def visualize_composer_alt(model, loader, save_path, epoch, raw=False):
         masks.append(mask)
 
         # pdb.set_trace()
-        # print shad_targ.size()
-        # print shad_pred.size()
-        # print [len(sublist) for sublist in splits]
         splits = [sublist[ind] for ind in range(len(splits[0])) for sublist in splits]
         images.extend(splits)
 

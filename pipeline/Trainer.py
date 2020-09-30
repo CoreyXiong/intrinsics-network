@@ -18,8 +18,8 @@ class Trainer:
 
         for ind, tensors in enumerate(self.loader):
 
-            inp = [ Variable( t.float().cuda(async=True) ) for t in tensors[:-1] ]
-            targ = Variable( tensors[-1].float().cuda(async=True) )
+            inp = [ Variable( t.float().cuda() ) for t in tensors[:-1] ]
+            targ = Variable( tensors[-1].float().cuda() )
 
             self.optimizer.zero_grad()
             out = self.model.forward(*inp)
