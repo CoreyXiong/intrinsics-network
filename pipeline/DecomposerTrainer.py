@@ -30,7 +30,7 @@ class DecomposerTrainer:
             loss.backward()
             self.optimizer.step()
 
-            losses.update( [l.data[0] for l in [refl_loss, shape_loss, lights_loss] ])
+            losses.update( [l.data for l in [refl_loss, shape_loss, lights_loss] ])
             progress.update(self.loader.batch_size)
             progress.set_description( '%.5f | %.5f | %.5f | %.3f' % (refl_loss.data[0], depth_loss.data[0], shape_loss.data[0], lights_loss.data[0]) )
         print('<Train> Losses: ', losses.avgs)

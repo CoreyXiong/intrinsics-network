@@ -107,7 +107,8 @@ class Decomposer(nn.Module):
         reflectance[mask] = 0
         normed[mask] = 0
         temp = mask[:,0]
-        temp = temp.view(20,-1,256,256) #FIXME
+        
+        temp = temp.view(-1,1,256,256) #FIXME
         depth[temp] = 0
         depth[mask[:,0]] = 0
 

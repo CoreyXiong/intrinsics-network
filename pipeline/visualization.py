@@ -119,9 +119,9 @@ def visualize_decomposer(model, loader, save_path, epoch, save_raw = False):
 
         refl_pred, depth_pred, shape_pred, lights_pred = model.forward(inp, mask)
 
-        refl_loss += criterion(refl_pred, refl_targ).data[0]
-        shape_loss += criterion(shape_pred, shape_targ).data[0]
-        lights_loss += criterion(lights_pred, lights_targ).data[0]
+        refl_loss += criterion(refl_pred, refl_targ).data
+        shape_loss += criterion(shape_pred, shape_targ).data
+        lights_loss += criterion(lights_pred, lights_targ).data
 
         shape_targ = pipeline.vector_to_image(shape_targ)
         shape_pred = pipeline.vector_to_image(shape_pred)
