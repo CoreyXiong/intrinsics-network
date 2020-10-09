@@ -1,4 +1,4 @@
-from utils import *
+from pipeline.utils import *
 from pipeline.Loader import *
 from pipeline.Render import *
 from pipeline.ComposerLoader import *
