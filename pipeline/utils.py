@@ -21,8 +21,11 @@ class AverageMeter(object):
 
 def initialize(args):
     mkdir(args.save_path)
+    print('AA')
     mkdir( os.path.join(args.save_path, 'raw_original') )
+    print('BB')
     mkdir( os.path.join(args.save_path, 'raw_trained') )
+    print('CC')
 
 def mkdir(path):
     path = os.path.abspath(path)
