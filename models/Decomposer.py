@@ -1,6 +1,6 @@
 import sys, torch, torch.nn as nn, torch.nn.functional as F
 from torch.autograd import Variable
-import models.primitives
+import models.primitives as primitives
 
 '''
 Predicts reflectance, shape, and lighting conditions given an image
