@@ -1,5 +1,5 @@
 import os, torch, torch.utils.data, scipy.misc, numpy as np, pdb
-import utils
+from . import utils
 
 class ComposerDataset(torch.utils.data.Dataset):
     def __init__(self, directory, unlabeled_datasets, labeled_datasets, size_per_dataset=10000, inds=None, unlabeled_array='shader2', labeled_array='shader2'):
